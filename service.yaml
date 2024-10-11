@@ -1,0 +1,71 @@
+## flash_attn requires cudatoolkit (https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=20.04&target_type=deb_network)
+
+`bash
+pip install -U flash_attn==2.5.8 torch==2.3.1 accelerate==0.31.0 transformers==4.41.2
+
+` bash
+docker run --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+`
+`elasticsearch
+
+
+`bash
+docker run --net kibana-elasticsearch-network --name elasticsearch -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+docker run --name kibana --net kibana-elasticsearch-network -p 5601:5601 kibana:8.15.0
+docker exec -it elasticsearch bash
+  cd /bin 
+    elasticsearch-create-enrollment-token -s kibana
+    elasticsearcg-reset-password -u elastic
+`kibana-elasticsearch
+
+index_settings = {
+    "settings": {
+        "number_of_shards": 1,
+        "number_of_replicas": 0
+    }, 
+    "mappings": {
+        "properties": {
+            "text": {"type": "text"},
+            "section": {"type": "text"},
+            "question": {"type": "text"},
+            "course": {"type": "keyword"}
+        }
+    }
+}
+
+index_name = "elasticsearch-fq"
+
+query = "I just discover the course. Can I still join it ?"
+
+search_query = {
+  "size": 5,
+  "query": {
+    "bool": {
+      "must": {
+        "multi_match": {
+          "query": query,
+          "fields": ["question^3", "text", "section"],
+          "type": "best_fields"
+        }
+      },
+      "filter": {
+        "term": {
+          "course": "data-engineering-zoomcamp"
+        }
+      }
+    }
+  }
+}`
+
+`bash
+## İnstall ollama
+curl -fsSL https://ollama.com/install.sh | sh
+## Pull model to ollama
+ollama pull model_name
+## Run model with ollama
+ollama run model_name
+## Remove model from ollama
+ollama rm model_name
+## Stop ollama service with systemctl
+systemctl stop ollama.service
+`
